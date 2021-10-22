@@ -1,0 +1,25 @@
+---
+- name: Install or update Firefox
+  hosts: firefoxclients
+  strategy: free
+  tasks:
+    - name: download latest Firefox x64 MSI
+      win_get_url:
+        url: https://download.mozilla.org/?product=firefox-msi-latest-ssl&os=win64&lang=de
+        dest: C:\Windows\temp\firefox-latest-x64.msi
+      register: download_result
+    - name: install Firefox
+      win_package:
+        path: C:\Windows\temp\firefox-latest-x64.msi
+        state: present
+        arguments:
+          - /norestart
+          - /quiet
+          - /log*v
+          - C:\Windows\Logs\firefox_install.log
+      register: install_result
+    - name: delete installer
+      win_file:
+        path: C:\Windows\temp\firefox-latest-x64.msi
+        state: absent
+      register: del_result
