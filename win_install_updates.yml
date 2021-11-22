@@ -1,25 +1,7 @@
 ---
 # Install Windows Updates on Application servers parallel
-- name: Install Updates on Application Server
-  hosts: applicationserver
-  strategy: free
-  tasks:
-    - name: search an install updates
-      win_updates:
-        category_names:
-          - CriticalUpdates
-          - SecurityUpdates
-          - DefinitionUpdates
-          - UpdateRollups
-          - Updates
-        reboot: yes
-        reboot_timeout: 3600
-        log_path: c:\windows\logs\ansible_update.log
-      register: update_result
-      
-# Install Windows Updates on Application servers parallel
-- name: Install Updates on Terminal Server
-  hosts: terminalserver
+- name: Install Updates on Application Server and Terminal Server
+  hosts: applicationserver, terminalserver
   strategy: free
   tasks:
     - name: search an install updates
