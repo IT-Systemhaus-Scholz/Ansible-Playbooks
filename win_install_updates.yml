@@ -16,6 +16,24 @@
         reboot_timeout: 3600
         log_path: c:\windows\logs\ansible_update.log
       register: update_result
+      
+# Install Windows Updates on Application servers parallel
+- name: Install Updates on Terminal Server
+  hosts: terminalserver
+  strategy: free
+  tasks:
+    - name: search an install updates
+      win_updates:
+        category_names:
+          - CriticalUpdates
+          - SecurityUpdates
+          - DefinitionUpdates
+          - UpdateRollups
+          - Updates
+        reboot: yes
+        reboot_timeout: 3600
+        log_path: c:\windows\logs\ansible_update.log
+      register: update_result
 
 # Install Windows Updates on Domain controllers linear
 - name: Install Updates on Domain Controller
