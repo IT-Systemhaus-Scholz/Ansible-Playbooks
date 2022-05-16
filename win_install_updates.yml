@@ -1,9 +1,12 @@
 ---
 # Install Windows Updates on Application servers parallel
-- name: Install Updates on Application Server and Terminal Server
-  hosts: applicationserver, terminalserver
+- name: Install Updates on Application Server
+  hosts: applicationserver
   strategy: free
   tasks:
+    - name: reboot before update
+      win_reboot:
+        reboot_timeout: 1800 # 30min
     - name: search an install updates
       win_updates:
         category_names:
@@ -13,7 +16,7 @@
           - UpdateRollups
           - Updates
         reboot: yes
-        reboot_timeout: 3600
+        reboot_timeout: 3600 # 60min
         log_path: c:\windows\logs\ansible_update.log
       register: update_result
 
@@ -21,6 +24,9 @@
 - name: Install Updates on Domain Controller
   hosts: domaincontroller
   tasks:
+    - name: reboot before update
+      win_reboot:
+        reboot_timeout: 1800 # 30min
     - name: search and install updates
       win_updates:
         category_names:
@@ -30,7 +36,7 @@
           - UpdateRollups
           - Updates
         reboot: yes
-        reboot_timeout: 3600
+        reboot_timeout: 3600 # 60min
         log_path: c:\windows\logs\ansible_update.log
       register: update_result
 
